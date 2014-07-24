@@ -2,7 +2,7 @@
 /*!
  *
  * stagas - got some 303
- * @modified: Inaki R
+ *
  */
 
 var bpm = 125;
@@ -189,33 +189,60 @@ DiodeFilter.prototype.run = function(x){
   return this.A*y4;
 };
 
-var osc = Oscillator('saw', 1024);
+/*var osc = Oscillator('ramp', 1024);
+var lfo = Oscillator('sin', 512);
+var lfo2 = Oscillator('sin', 512);*/
+
+/*/////////////
+sin
+saw
+ramp
+tri
+sqr
+////////////*/
+
+var osc = Oscillator('sqr', 1024);
 var lfo = Oscillator('sin', 512);
 var lfo2 = Oscillator('sin', 512);
 
-var melody = [-10, 35, -10, 34, -10, 35, 30, 30 ].map(function(n){
+melodies = [];
+
+var melody = [30, 30, 30, 20, 30, 30, 30, 30, 30, 30, 30, 20, 30, 30, 30, 30].map(function(n){
+  return note(n, 0.2);
+});
+
+var melody2 = [10, 80, 20, 20, 40, 0, 0, 42, 50, 32, 50].map(function(n){
   return note(n, 0);
 });
 
+melodies.add(melody);
+melodies.add(melody2);
+
 var filter = new DiodeFilter();
 
-filter.set_q(0.66);
-filter.set_hpf(.0007);
+filter.set_q(0.67);
+filter.set_hpf(0.0007);
 
 function dsp(t){
   clock(t);
 
-  filter.set_fc(0.001 + ((lfo.play(2.66) * 0.16 + 1) / 2) * (0.258 + lfo2.play(.02) * 0.12)) ;
+  filter.set_fc(0.001 + ((lfo.play(2.70) * 0.16 + 1) / 2) * (0.258 + lfo2.play(.02) * 0.12)) ;
 
-  var n = slide(1/3, melody, 545);
+  for (var xx=0; xx < melodies.length(); xx++){
 
+  var n = slide(1/5, melodies[xx], 545);
+  
   var synth_osc = osc.play(n);
-  var synth = arp(1/3, synth_osc, 95, 1/2);
+  var tsynth = arp(1/5, synth_osc, 95, 1);
 
-  synth = filter.run(synth * 0.5);
-  synth = clip(synth * 12);
+  tsynth = filter.run(synth * 0.5);
+  tsynth = clip(synth * 12);
 
-  var kick = arp(1/4, 48, 50, 8);
+    synth += tsinth;
+
+  }
+
+  var kick = arp(1/5, 70, 70, 10);
 
   // mixer
   return 0.7 * (
