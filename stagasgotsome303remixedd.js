@@ -228,16 +228,16 @@ function dsp(t){
 
   filter.set_fc(0.001 + ((lfo.play(2.70) * 0.16 + 1) / 2) * (0.258 + lfo2.play(.02) * 0.12)) ;
 
-  for (var xx=0; xx < melodies.length(); xx++){
+  for (var xx=0; xx < melodies.length; xx++){
 
-  var n = slide(1/5, melodies[xx], 545);
+    var n = slide(1/5, melodies.get(xx), 545);
+    
+    var synth_osc = osc.play(n);
+    var tsynth = arp(1/5, synth_osc, 95, 1);
   
-  var synth_osc = osc.play(n);
-  var tsynth = arp(1/5, synth_osc, 95, 1);
-
-  tsynth = filter.run(synth * 0.5);
-  tsynth = clip(synth * 12);
-
+    tsynth = filter.run(synth * 0.5);
+    tsynth = clip(synth * 12);
+  
     synth += tsinth;
 
   }
