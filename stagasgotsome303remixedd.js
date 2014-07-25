@@ -1,9 +1,8 @@
-
 /*!
- *
- * stagas - got some 303
- *
- */
+*
+* stagas - got some 303
+*
+*/
 
 var bpm = 125;
 var tuning = 440;
@@ -201,22 +200,13 @@ tri
 sqr
 ////////////*/
 
-var osc = Oscillator('sqr', 1024);
+var osc = Oscillator('sin', 1024);
 var lfo = Oscillator('sin', 512);
 var lfo2 = Oscillator('sin', 512);
-
-melodies = [];
 
 var melody = [30, 30, 30, 20, 30, 30, 30, 30, 30, 30, 30, 20, 30, 30, 30, 30].map(function(n){
   return note(n, 0.2);
 });
-
-var melody2 = [10, 80, 20, 20, 40, 0, 0, 42, 50, 32, 50].map(function(n){
-  return note(n, 0);
-});
-
-melodies.add(melody);
-melodies.add(melody2);
 
 var filter = new DiodeFilter();
 
@@ -228,19 +218,14 @@ function dsp(t){
 
   filter.set_fc(0.001 + ((lfo.play(2.70) * 0.16 + 1) / 2) * (0.258 + lfo2.play(.02) * 0.12)) ;
 
-  for (var xx=0; xx < melodies.length; xx++){
+var n = slide(1/25, melody, 545);
 
-    var n = slide(1/5, melodies.get(xx), 545);
-    
-    var synth_osc = osc.play(n);
-    var tsynth = arp(1/5, synth_osc, 95, 1);
-  
-    tsynth = filter.run(synth * 0.5);
-    tsynth = clip(synth * 12);
-  
-    synth += tsinth;
+var synth_osc = osc.play(n);
+var synth = arp(1/5, synth_osc, 95, 1);
 
-  }
+synth = filter.run(synth * 0.5);
+synth = clip(synth * 12);
+
 
   var kick = arp(1/5, 70, 70, 10);
 
